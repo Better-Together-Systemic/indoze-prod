@@ -79,3 +79,4 @@ npm run build     # gera o dist/
 npm run preview   # olha o build pronto antes de subir
 npm audit         # confere se alguma dependência ficou vulnerável
 ```
+# indoze-prod
