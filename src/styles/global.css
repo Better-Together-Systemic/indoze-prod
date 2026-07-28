@@ -147,6 +147,13 @@ body::before{
 }
 .btn-linha:hover{background:var(--marinho);color:var(--areia)}
 
+/* ====== TELAS DE AUTENTICAÇÃO (entrar, criar ninho, nova senha) ====== */
+.tela-auth{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+  background:var(--areia);
+}
+
 /* ====== MODAL ====== */
 .modal-fundo{
   display:none;position:fixed;inset:0;z-index:100;
@@ -163,6 +170,9 @@ body::before{
   box-shadow:0 30px 80px rgba(13,27,62,.4);
   border-top:5px solid var(--dourado);
 }
+/* dentro do modal o fundo é claro — a variante "topo" da logo foi feita
+   para o cabeçalho escuro, então aqui ela precisa da tinta marinho */
+.modal .marca-indoze{color:var(--marinho)}
 .modal h2{
   font-family:var(--fnt-titulo);
   font-size:var(--txt-grande);

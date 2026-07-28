@@ -5,10 +5,16 @@ import { supabase } from './supabase'
  * As senhas nunca passam por aqui em texto: quem guarda (com hash) é o Supabase.
  */
 
-export async function cadastrar({ nome, email, senha, instagram, genero }) {
+export async function cadastrar({ nome, email, senha, whatsapp, instagram, genero }) {
   const erroSenha = validarSenha(senha)
   if (erroSenha) throw new Error(erroSenha)
   if (!nome?.trim()) throw new Error('Escreva seu nome, por favor.')
+
+  const erroEmail = validarEmail(email)
+  if (erroEmail) throw new Error(erroEmail)
+
+  const erroWhatsapp = validarWhatsapp(whatsapp)
+  if (erroWhatsapp) throw new Error(erroWhatsapp)
 
   const { data, error } = await supabase.auth.signUp({
     email: email.trim(),
@@ -17,6 +23,7 @@ export async function cadastrar({ nome, email, senha, instagram, genero }) {
       // isto vira o perfil automaticamente, pelo gatilho do banco
       data: {
         nome: nome.trim(),
+        whatsapp: whatsapp.trim(),
         instagram: (instagram ?? '').replace(/^@+/, '').trim(),
         genero: genero ?? 'n',
       },
@@ -64,6 +71,24 @@ export function validarSenha(senha) {
   if (!/[A-Z]/.test(senha)) return 'A senha precisa de uma letra maiúscula.'
   if (!/[0-9]/.test(senha)) return 'A senha precisa de um número.'
   if (!/[^A-Za-z0-9]/.test(senha)) return 'A senha precisa de um símbolo (!@#$...).'
+  return null
+}
+
+/** E-mail no formato básico algo@algo.algo — sem regex exagerada, só o essencial. */
+export function validarEmail(email) {
+  const limpo = (email ?? '').trim()
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(limpo)) {
+    return 'Escreva um e-mail válido.'
+  }
+  return null
+}
+
+/** WhatsApp com DDI, DDD e número — ex: +55 11 91234-5678. */
+export function validarWhatsapp(whatsapp) {
+  const limpo = (whatsapp ?? '').trim()
+  if (!/^\+\d{1,3}\s?\d{2}\s?\d{4,5}-?\d{4}$/.test(limpo)) {
+    return 'Escreva o WhatsApp com DDI, DDD e número, assim: +55 11 91234-5678.'
+  }
   return null
 }
 

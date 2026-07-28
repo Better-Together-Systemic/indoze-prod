@@ -2,9 +2,9 @@
 // A ANTHROPIC_API_KEY vive só aqui (variável de ambiente da função), nunca no front.
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-// PASSO 3.1 — troque pelo domínio de produção real antes do deploy.
 const origensPermitidas = [
-  'https://SEU-DOMINIO.com.br',
+  'https://indoze.vercel.app',
+  'https://indoze-prod.vercel.app',
   'http://localhost:5173',
 ]
 

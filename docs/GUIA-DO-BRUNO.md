@@ -103,7 +103,7 @@ A função já existe. Duas coisas a conferir:
 
 ```ts
 const origensPermitidas = [
-  'https://SEU-DOMINIO.com.br',
+  'https://indoze-prod.vercel.app',
   'http://localhost:5173',
 ]
 const origem = req.headers.get('origin') ?? ''

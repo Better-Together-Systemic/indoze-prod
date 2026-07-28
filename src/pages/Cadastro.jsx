@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { cadastrar, forcaDaSenha } from '../lib/auth'
+import { cadastrar, forcaDaSenha, validarEmail, validarWhatsapp } from '../lib/auth'
 import { detectarGenero } from '../lib/linguagem'
 import { LogoIndoze } from '../components/LogoIndoze'
 
@@ -10,6 +10,7 @@ export default function Cadastro() {
   const navegar = useNavigate()
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
   const [instagram, setInstagram] = useState('')
   const [senha, setSenha] = useState('')
   const [genero, setGenero] = useState('n')
@@ -17,6 +18,8 @@ export default function Cadastro() {
   const [erro, setErro] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [pronto, setPronto] = useState(false)
+  const [emailTocado, setEmailTocado] = useState(false)
+  const [whatsappTocado, setWhatsappTocado] = useState(false)
 
   // Palpite educado pelo nome — mas quem manda é a pessoa.
   useEffect(() => {
@@ -24,14 +27,19 @@ export default function Cadastro() {
   }, [nome, escolheuGenero])
 
   const forca = forcaDaSenha(senha)
-  const podeCriar = nome.trim() && email.includes('@') && forca === 4 && !enviando
+  const podeCriar =
+    nome.trim() &&
+    !validarEmail(email) &&
+    !validarWhatsapp(whatsapp) &&
+    forca === 4 &&
+    !enviando
 
   async function aoEnviar(e) {
     e.preventDefault()
     setErro('')
     setEnviando(true)
     try {
-      await cadastrar({ nome, email, senha, instagram, genero })
+      await cadastrar({ nome, email, senha, whatsapp, instagram, genero })
       setPronto(true)
     } catch (err) {
       setErro(err.message)
@@ -100,8 +108,25 @@ export default function Cadastro() {
           <input
             id="cad-email" type="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setEmailTocado(true)}
             placeholder="seu@email.com" autoComplete="email" required
           />
+          {emailTocado && validarEmail(email) && (
+            <div className="erro-msg" role="alert">{validarEmail(email)}</div>
+          )}
+        </div>
+
+        <div className="campo">
+          <label htmlFor="cad-whatsapp">WhatsApp</label>
+          <input
+            id="cad-whatsapp" type="tel" value={whatsapp}
+            onChange={(e) => setWhatsapp(e.target.value)}
+            onBlur={() => setWhatsappTocado(true)}
+            placeholder="+55 11 91234-5678" autoComplete="tel" required
+          />
+          {whatsappTocado && validarWhatsapp(whatsapp) && (
+            <div className="erro-msg" role="alert">{validarWhatsapp(whatsapp)}</div>
+          )}
         </div>
 
         <div className="campo">
