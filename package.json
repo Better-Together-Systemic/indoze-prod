@@ -1,0 +1,27 @@
+{
+  "name": "indoze",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "INDOZE — O Efeito Chocadeira. Jornada de 12 dias de incubação.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "auditoria": "bash scripts/auditoria.sh"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "jspdf": "^4.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "vite": "^7.3.6"
+  }
+}

@@ -1,0 +1,545 @@
+/* =====================================================================
+   INDOZE — O Efeito Chocadeira
+   Estilos da marca: papel antigo encontra circuito digital.
+   Preferências da Eli: letras GRANDES e legíveis, nada cortado.
+   ===================================================================== */
+
+:root{
+  /* Paleta In12 — papel antigo encontra circuito digital */
+  --marinho:#0d1b3e;       /* azul-marinho profundo */
+  --marinho-2:#13264f;
+  --ciano:#22d3ee;         /* ciano luminoso do circuito */
+  --ciano-suave:#7fe3f0;
+  --dourado:#c8952a;       /* dourado da assinatura */
+  --dourado-claro:#e3b862;
+  --areia:#f2ead6;         /* fundo pergaminho */
+  --areia-2:#e8dcc0;
+  --papel:#faf5e9;
+  --tinta:#1a1a1a;
+  --tinta-suave:#4a4a4a;
+  --verde:#2e7d32;
+  --sombra:rgba(13,27,62,.14);
+
+  --fnt-titulo:'Fraunces',Georgia,serif;
+  --fnt-corpo:'Inter',system-ui,sans-serif;
+
+  /* Letras GRANDES e legíveis — preferência da Eli */
+  --txt-base:19px;
+  --txt-medio:22px;
+  --txt-grande:28px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--fnt-corpo);
+  font-size:var(--txt-base);
+  line-height:1.7;
+  color:var(--tinta);
+  background:var(--areia);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* textura de papel sutil no fundo */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(200,149,42,.05), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(34,211,238,.05), transparent 45%),
+    var(--areia);
+}
+
+/* ====== ESTRUTURA GERAL ====== */
+.tela{display:none;min-height:100vh}
+.tela.ativa{display:block;animation:surge .5s ease}
+@keyframes surge{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.container{max-width:1000px;margin:0 auto;padding:0 24px}
+
+/* ====== TELA DE ENTRADA ====== */
+#tela-entrada{
+  display:none;
+  background:var(--areia);
+}
+#tela-entrada.ativa{display:flex;flex-direction:column;min-height:100vh}
+
+
+.hero-titulo{
+  text-align:center;
+  padding:clamp(48px,9vh,96px) 24px clamp(56px,8vh,88px);
+  background:var(--areia);
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(40px,6vh,64px);
+  flex:1;justify-content:center;
+}
+.indoze-logo{
+  display:flex;align-items:center;justify-content:center;gap:2px;
+  font-family:var(--fnt-titulo);font-weight:700;
+  font-size:clamp(52px,9vw,104px);
+  line-height:1;color:var(--marinho);letter-spacing:.02em;
+}
+.indoze-logo .ind-txt{display:inline-block}
+.indoze-logo .ind-ovo{display:inline-flex;align-items:center;justify-content:center;}
+.indoze-logo .ind-ovo svg{
+  width:.72em;height:.96em;display:block;margin:0 -.02em;
+  filter:drop-shadow(0 4px 10px rgba(200,149,42,.35));
+}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero-titulo .tag{
+  display:inline-block;margin-top:20px;
+  font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinta-suave);
+  border:1.5px solid var(--tinta-suave);
+  padding:8px 18px;border-radius:2px;
+}
+/* assinatura Better Together na entrada */
+.assinatura-marca{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.assinatura-rotulo{
+  font-size:14px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--tinta-suave);
+}
+.logo-bt{
+  width:min(300px,74vw);height:auto;
+  opacity:.92;
+}
+/* logo no topo do app */
+.marca{display:flex;align-items:center;gap:14px}
+.marca-indoze{
+  display:inline-flex;align-items:center;gap:1px;
+  font-family:var(--fnt-titulo);font-weight:700;
+  font-size:22px;color:var(--areia);letter-spacing:.02em;
+}
+.marca-indoze .ovo-topo{display:inline-flex;align-items:center}
+.marca-indoze .ovo-topo svg{width:.66em;height:.9em;display:block;margin:0 -.03em}
+.logo-bt-topo{
+  height:30px;width:auto;
+  padding-right:14px;
+  border-right:2px solid rgba(242,234,214,.28);
+}
+@media(max-width:600px){
+  .marca-indoze{font-size:19px}
+  .logo-bt-topo{height:26px;padding-right:10px}
+}
+
+.entrada-acoes{
+  display:flex;gap:18px;justify-content:center;flex-wrap:wrap;
+}
+.btn{
+  font-size:var(--txt-medio);
+  font-weight:600;
+  padding:18px 40px;
+  border-radius:14px;
+  transition:transform .15s, box-shadow .2s, background .2s;
+}
+.btn-ouro{
+  background:linear-gradient(135deg,var(--dourado),var(--dourado-claro));
+  color:#3a2a08;
+  box-shadow:0 8px 24px rgba(200,149,42,.35);
+}
+.btn-ouro:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(200,149,42,.45)}
+.btn-linha{
+  background:transparent;color:var(--marinho);
+  border:2px solid var(--marinho);
+}
+.btn-linha:hover{background:var(--marinho);color:var(--areia)}
+
+/* ====== MODAL ====== */
+.modal-fundo{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(13,27,62,.55);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-fundo.ativa{display:flex;animation:surge .3s ease}
+.modal{
+  background:var(--papel);
+  border-radius:22px;
+  max-width:560px;width:100%;
+  max-height:88vh;overflow-y:auto;
+  padding:44px;
+  box-shadow:0 30px 80px rgba(13,27,62,.4);
+  border-top:5px solid var(--dourado);
+}
+.modal h2{
+  font-family:var(--fnt-titulo);
+  font-size:var(--txt-grande);
+  color:var(--marinho);
+  margin-bottom:18px;
+}
+.modal p{font-size:var(--txt-base);margin-bottom:16px;color:var(--tinta-suave)}
+.modal .fechar{
+  position:relative;float:right;
+  font-size:30px;color:var(--tinta-suave);
+  line-height:1;margin:-12px -12px 0 0;
+}
+
+/* campos de formulário — grandes e legíveis */
+.campo{margin-bottom:20px}
+.campo label{
+  display:block;font-size:16px;font-weight:600;
+  color:var(--marinho);margin-bottom:8px;
+}
+.campo input{
+  width:100%;font-size:var(--txt-base);font-family:inherit;
+  padding:16px 18px;border-radius:12px;
+  border:2px solid var(--areia-2);background:#fff;
+  transition:border .2s;
+}
+.campo input:focus{outline:none;border-color:var(--ciano)}
+
+.forca{height:8px;border-radius:4px;background:var(--areia-2);margin-top:10px;overflow:hidden}
+.forca span{display:block;height:100%;width:0;transition:width .3s,background .3s;border-radius:4px}
+.requisitos{list-style:none;margin-top:12px;font-size:15px}
+.requisitos li{color:var(--tinta-suave);margin:4px 0;transition:color .2s}
+.requisitos li.ok{color:var(--verde);font-weight:600}
+.requisitos li::before{content:"○ ";}
+.requisitos li.ok::before{content:"● ";}
+
+.link-texto{
+  background:none;color:var(--marinho);
+  font-size:16px;text-decoration:underline;
+  padding:6px;
+}
+.erro-msg{color:#c0392b;font-size:16px;margin:10px 0;min-height:20px}
+
+/* ====== APP LOGADO ====== */
+#tela-app{display:none}
+#tela-app.ativa{display:block}
+.topo{
+  background:var(--marinho);
+  color:var(--areia);
+  padding:10px 0;
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 4px 20px var(--sombra);
+}
+.topo .container{display:flex;align-items:center;justify-content:space-between}
+.topo .marca{display:flex;align-items:center;gap:14px}
+.perfil-btn{
+  color:var(--areia);font-size:17px;font-weight:500;
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:10px;transition:background .2s;
+}
+.perfil-btn:hover{background:var(--marinho-2)}
+.menu-perfil{
+  display:none;position:absolute;right:24px;top:64px;
+  background:var(--papel);border-radius:14px;
+  box-shadow:0 12px 40px var(--sombra);
+  overflow:hidden;min-width:200px;z-index:60;
+}
+.menu-perfil.ativa{display:block}
+.menu-perfil button{
+  display:block;width:100%;text-align:left;
+  padding:16px 20px;font-size:17px;color:var(--tinta);
+  transition:background .15s;
+}
+.menu-perfil button:hover{background:var(--areia)}
+
+/* abas */
+.abas{
+  display:flex;gap:8px;overflow-x:auto;
+  padding:18px 24px;background:var(--areia-2);
+  position:sticky;top:60px;z-index:40;
+}
+.aba{
+  white-space:nowrap;font-size:18px;font-weight:600;
+  padding:12px 22px;border-radius:12px;
+  color:var(--marinho-2);background:transparent;
+  transition:background .2s,color .2s;
+}
+.aba.ativa{background:var(--marinho);color:var(--areia)}
+
+.painel{display:none;padding:44px 0 80px}
+.painel.ativa{display:block;animation:surge .4s ease}
+.painel h2.titulo-secao{
+  font-family:var(--fnt-titulo);font-weight:700;
+  font-size:clamp(30px,5vw,44px);color:var(--marinho);
+  margin-bottom:12px;
+}
+.painel p.intro{font-size:var(--txt-medio);color:var(--tinta-suave);margin-bottom:32px;max-width:720px}
+
+/* cards de recurso (A Sala) */
+.grade-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.card{
+  background:var(--papel);border-radius:18px;padding:30px;
+  box-shadow:0 6px 22px var(--sombra);
+  border-left:4px solid var(--dourado);
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 32px var(--sombra)}
+.card .icone{font-size:40px;margin-bottom:14px}
+.card h3{font-family:var(--fnt-titulo);font-size:24px;color:var(--marinho);margin-bottom:10px}
+.card p{font-size:17px;color:var(--tinta-suave);line-height:1.6}
+
+/* grade dos 12 dias */
+.grade-dias{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.dia-card{
+  background:var(--papel);border-radius:18px;padding:24px;
+  box-shadow:0 6px 20px var(--sombra);
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+  border-top:5px solid var(--cor-fase,var(--dourado));
+}
+.dia-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px var(--sombra)}
+.dia-card .num{
+  font-family:var(--fnt-titulo);font-weight:700;
+  font-size:19px;color:var(--cor-fase,var(--dourado));
+  letter-spacing:.05em;
+}
+.dia-card .emoji{font-size:38px;margin:8px 0}
+.dia-card h4{font-family:var(--fnt-titulo);font-size:21px;color:var(--marinho);line-height:1.2}
+.dia-card .selo{
+  position:absolute;top:16px;right:16px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--verde);color:#fff;
+  display:none;align-items:center;justify-content:center;font-size:15px;
+}
+.dia-card.feito .selo{display:flex}
+.dia-card .selo.cadeado,.dia-card .selo.agora{
+  display:flex;background:transparent;font-size:17px;
+}
+
+/* dia concluído — vira memória guardada */
+.dia-card.feito{opacity:.72;background:linear-gradient(180deg,var(--papel),#f0e9d8)}
+.dia-card.feito:hover{opacity:.9;transform:translateY(-2px)}
+
+/* dia da vez — destacado, pulsando de leve */
+.dia-card.aberto{box-shadow:0 8px 28px rgba(200,149,42,.28);border-top-width:6px}
+.dia-card.aberto::after{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  border:2px solid var(--dourado);opacity:.55;pointer-events:none;
+}
+
+/* dia trancado — ainda chocando */
+.dia-card.trancado{
+  opacity:.42;filter:grayscale(.55);cursor:not-allowed;
+  box-shadow:0 3px 10px var(--sombra);
+}
+.dia-card.trancado:hover{transform:none;opacity:.55}
+.dia-card.trancado h4{color:var(--tinta-suave)}
+
+.estado-dia{
+  display:block;margin-top:10px;font-size:13px;font-style:italic;color:var(--tinta-suave);
+}
+.estado-dia.agora{color:var(--dourado);font-weight:700;font-style:normal}
+
+/* aviso quando toca num dia trancado */
+.aviso-trancado{
+  max-height:0;opacity:0;overflow:hidden;
+  background:linear-gradient(135deg,rgba(200,149,42,.14),rgba(34,211,238,.10));
+  border-radius:14px;font-size:17px;color:var(--marinho);
+  transition:all .35s;margin-bottom:0;padding:0 22px;
+}
+.aviso-trancado.aparece{max-height:140px;opacity:1;padding:18px 22px;margin-bottom:22px}
+
+/* reflexão já guardada (só leitura) */
+.reflexao-guardada{
+  background:#f0e6cc;border-left:5px solid var(--cor-fase,var(--dourado));
+  border-radius:12px;padding:20px 22px;
+  font-size:20px;line-height:1.7;color:var(--marinho);
+  font-family:var(--fnt-titulo);font-style:italic;white-space:pre-wrap;
+}
+.nota-guardada{
+  margin-top:12px;font-size:15px;color:var(--tinta-suave);font-style:italic;
+}
+
+.dia-card .fase-tag{
+  display:inline-block;margin-top:10px;font-size:13px;
+  padding:4px 12px;border-radius:20px;font-weight:600;
+  background:var(--cor-fase-bg,#eee);color:var(--cor-fase,#333);
+}
+
+/* detalhe do dia */
+.dia-detalhe{
+  background:var(--papel);border-radius:22px;padding:40px;
+  box-shadow:0 10px 40px var(--sombra);
+  border-top:6px solid var(--cor-fase,var(--dourado));
+}
+.dia-detalhe .fase-badge{
+  display:inline-block;font-size:15px;font-weight:700;
+  padding:6px 16px;border-radius:20px;margin-bottom:14px;
+  background:var(--cor-fase-bg,#eee);color:var(--cor-fase,#333);
+}
+.dia-detalhe h2{font-family:var(--fnt-titulo);font-size:clamp(28px,5vw,40px);color:var(--marinho);margin-bottom:8px}
+.dia-detalhe .emoji-grande{font-size:56px;margin-bottom:12px}
+.bloco{margin:24px 0}
+.bloco .rotulo{
+  font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dourado);margin-bottom:8px;
+}
+.bloco p{font-size:var(--txt-medio);line-height:1.7;color:var(--tinta)}
+.bloco.indez{
+  background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(200,149,42,.08));
+  border-radius:16px;padding:24px;border-left:4px solid var(--ciano);
+}
+textarea.reflexao{
+  width:100%;min-height:180px;font-family:inherit;font-size:var(--txt-base);
+  padding:20px;border-radius:14px;border:2px solid var(--areia-2);
+  background:#fff;line-height:1.7;resize:vertical;transition:border .2s;
+}
+textarea.reflexao:focus{outline:none;border-color:var(--ciano)}
+.dia-acoes{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px}
+
+/* chat com o Indez */
+.chat-caixa{
+  background:var(--papel);border-radius:22px;
+  box-shadow:0 10px 40px var(--sombra);
+  display:flex;flex-direction:column;height:70vh;min-height:480px;overflow:hidden;
+}
+.chat-topo{
+  background:linear-gradient(135deg,var(--marinho),var(--marinho-2));
+  color:var(--areia);padding:20px 26px;display:flex;align-items:center;gap:14px;
+}
+.chat-ovo{
+  width:44px;height:44px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,var(--ciano-suave),var(--ciano) 55%,var(--marinho-2));
+  box-shadow:0 0 20px var(--ciano);flex-shrink:0;
+}
+.chat-topo h3{font-family:var(--fnt-titulo);font-size:22px}
+.chat-topo p{font-size:14px;opacity:.8}
+.chat-msgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.msg{max-width:80%;padding:16px 20px;border-radius:18px;font-size:18px;line-height:1.6}
+.msg.indez{background:var(--areia-2);color:var(--tinta);align-self:flex-start;border-bottom-left-radius:6px}
+.msg.eu{background:linear-gradient(135deg,var(--marinho),var(--marinho-2));color:var(--areia);align-self:flex-end;border-bottom-right-radius:6px}
+.msg.pensando{color:var(--tinta-suave);font-style:italic}
+.chat-entrada{display:flex;gap:12px;padding:18px;border-top:2px solid var(--areia-2);background:var(--papel)}
+.chat-entrada input{
+  flex:1;font-size:var(--txt-base);font-family:inherit;
+  padding:16px 20px;border-radius:14px;border:2px solid var(--areia-2);background:#fff;
+}
+.chat-entrada input:focus{outline:none;border-color:var(--ciano)}
+.chat-enviar{
+  background:linear-gradient(135deg,var(--dourado),var(--dourado-claro));
+  color:#3a2a08;font-size:20px;font-weight:700;padding:0 28px;border-radius:14px;
+}
+
+/* Meu Indez */
+.indez-lista{display:grid;gap:16px}
+.indez-item{
+  background:var(--papel);border-radius:16px;padding:24px;
+  box-shadow:0 6px 20px var(--sombra);border-left:4px solid var(--ciano);
+  display:flex;align-items:flex-start;gap:16px;
+}
+.indez-item .ovo{font-size:32px;flex-shrink:0}
+.indez-item .conteudo h4{font-family:var(--fnt-titulo);font-size:20px;color:var(--marinho);margin-bottom:6px}
+.indez-item .conteudo p{font-size:17px;color:var(--tinta-suave)}
+.indez-item .data{font-size:14px;color:var(--dourado);margin-top:8px;font-weight:600}
+.vazio{text-align:center;padding:60px 24px;color:var(--tinta-suave)}
+.vazio .emoji{font-size:64px;margin-bottom:16px}
+.vazio p{font-size:var(--txt-medio)}
+
+/* Histórias */
+.depoimentos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.depoimento{
+  background:var(--papel);border-radius:18px;padding:30px;
+  box-shadow:0 6px 22px var(--sombra);position:relative;
+}
+.depoimento::before{
+  content:"\201C";font-family:var(--fnt-titulo);
+  font-size:72px;color:var(--dourado);opacity:.3;
+  position:absolute;top:8px;left:20px;line-height:1;
+}
+.depoimento p{font-size:18px;line-height:1.7;color:var(--tinta);margin:24px 0 16px;position:relative}
+.depoimento .autor{font-weight:700;color:var(--marinho);font-size:17px}
+.depoimento .relacao{font-size:14px;color:var(--tinta-suave)}
+.selo-depoimento{
+  display:inline-block;margin-top:16px;
+  font-size:14px;font-weight:700;letter-spacing:.03em;
+  color:var(--verde);background:rgba(46,125,50,.10);
+  padding:7px 16px;border-radius:20px;
+}
+
+/* barra de concluir conversa (aparece quando é sobre um dia) */
+.barra-concluir{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:14px 20px;background:linear-gradient(135deg,rgba(34,211,238,.10),rgba(200,149,42,.10));
+  border-top:2px solid var(--areia-2);
+}
+.barra-concluir .rotulo-dia{font-size:16px;font-weight:600;color:var(--marinho)}
+.btn-concluir{
+  background:linear-gradient(135deg,var(--verde),#3a9440);
+  color:#fff;font-size:17px;font-weight:600;
+  padding:12px 22px;border-radius:12px;transition:transform .15s,box-shadow .2s;
+}
+.btn-concluir:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,125,50,.35)}
+
+/* subtítulos dentro do Meu Ninho */
+.sub-ninho{
+  font-family:var(--fnt-titulo);font-size:24px;color:var(--marinho);
+  margin:28px 0 14px;
+}
+.sub-ninho:first-child{margin-top:0}
+
+/* item de conversa clicável no ninho */
+.conversa-item{
+  width:100%;text-align:left;cursor:pointer;font-family:inherit;
+  border-left:4px solid var(--dourado)!important;
+  transition:transform .2s,box-shadow .2s;
+}
+.conversa-item:hover{transform:translateY(-3px);box-shadow:0 12px 30px var(--sombra)}
+
+/* leitor de conversa */
+.modal-leitor{max-width:640px}
+.leitor-corpo{
+  display:flex;flex-direction:column;gap:14px;margin-top:20px;
+  max-height:60vh;overflow-y:auto;padding-right:6px;
+}
+.leitor-corpo .msg{max-width:88%;font-size:17px}
+
+/* campo de Instagram no cadastro */
+.campo-insta{display:flex;align-items:center;border:2px solid var(--areia-2);border-radius:12px;background:var(--papel);overflow:hidden}
+.campo-insta .arroba{padding:0 6px 0 14px;font-size:19px;font-weight:700;color:var(--dourado)}
+.campo-insta input{border:none;flex:1;background:transparent;padding-left:2px}
+.campo-insta:focus-within{border-color:var(--dourado)}
+
+/* opções de tratamento (gênero) no cadastro */
+.opcoes-genero{display:flex;gap:10px;flex-wrap:wrap}
+.op-genero{
+  flex:1;min-width:96px;padding:12px 10px;border-radius:12px;
+  border:2px solid var(--areia-2);background:var(--papel);
+  color:var(--marinho);font-size:15px;font-weight:600;line-height:1.3;
+  cursor:pointer;transition:all .15s;text-align:center;
+}
+.op-genero small{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--tinta-suave)}
+.op-genero:hover{border-color:var(--dourado)}
+.op-genero.ativa{border-color:var(--dourado);background:linear-gradient(135deg,rgba(200,149,42,.14),rgba(34,211,238,.10));box-shadow:0 4px 14px var(--sombra)}
+
+/* barra do livro em PDF */
+.barra-livro{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:var(--papel);border-radius:18px;padding:24px 28px;margin-bottom:28px;
+  box-shadow:0 6px 22px var(--sombra);border-left:5px solid var(--areia-2);
+}
+.barra-livro.pronta{border-left-color:var(--verde);background:linear-gradient(135deg,rgba(46,125,50,.08),rgba(200,149,42,.10));}
+.barra-livro strong{display:block;font-family:var(--fnt-titulo);font-size:21px;color:var(--marinho);margin-bottom:4px}
+.barra-livro span{font-size:16px;color:var(--tinta-suave)}
+.btn-livro{
+  background:linear-gradient(135deg,var(--dourado),var(--dourado-claro));color:#3a2a08;
+  font-size:18px;font-weight:700;padding:16px 30px;border-radius:14px;white-space:nowrap;
+  transition:transform .15s,box-shadow .2s;
+}
+.btn-livro:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 26px rgba(200,149,42,.4)}
+.btn-livro:disabled{opacity:.7;cursor:wait}
+.progresso-livro{width:220px;max-width:100%;height:12px;border-radius:6px;background:var(--areia-2);overflow:hidden}
+.progresso-livro span{display:block;height:100%;background:linear-gradient(90deg,var(--dourado),var(--verde));border-radius:6px;transition:width .4s}
+
+/* rodapé de fases (legenda) */
+.legenda-fases{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.legenda-fases .item{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600}
+.legenda-fases .bola{width:16px;height:16px;border-radius:50%}
+
+/* responsivo */
+@media(max-width:720px){
+  :root{--txt-base:18px;--txt-medio:20px;--txt-grande:25px}
+  .hero-titulo{gap:36px;padding:44px 20px 52px}
+  .entrada-acoes{flex-direction:column;width:100%;max-width:340px}
+  .entrada-acoes .btn{width:100%}
+  .modal{padding:30px}
+  .msg{max-width:90%}
+}
+
+/* acessibilidade */
+:focus-visible{outline:3px solid var(--ciano);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

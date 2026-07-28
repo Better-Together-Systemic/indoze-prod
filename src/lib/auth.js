@@ -1,0 +1,88 @@
+import { supabase } from './supabase'
+
+/**
+ * Login de verdade, via Supabase Auth.
+ * As senhas nunca passam por aqui em texto: quem guarda (com hash) é o Supabase.
+ */
+
+export async function cadastrar({ nome, email, senha, instagram, genero }) {
+  const erroSenha = validarSenha(senha)
+  if (erroSenha) throw new Error(erroSenha)
+  if (!nome?.trim()) throw new Error('Escreva seu nome, por favor.')
+
+  const { data, error } = await supabase.auth.signUp({
+    email: email.trim(),
+    password: senha,
+    options: {
+      // isto vira o perfil automaticamente, pelo gatilho do banco
+      data: {
+        nome: nome.trim(),
+        instagram: (instagram ?? '').replace(/^@+/, '').trim(),
+        genero: genero ?? 'n',
+      },
+      emailRedirectTo: `${window.location.origin}/entrar`,
+    },
+  })
+
+  if (error) throw traduzirErro(error)
+  return data
+}
+
+export async function entrar({ email, senha }) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.trim(),
+    password: senha,
+  })
+  if (error) throw traduzirErro(error)
+  return data
+}
+
+export async function sair() {
+  const { error } = await supabase.auth.signOut()
+  if (error) throw error
+}
+
+export async function pedirNovaSenha(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+    redirectTo: `${window.location.origin}/nova-senha`,
+  })
+  if (error) throw traduzirErro(error)
+}
+
+export async function definirNovaSenha(senha) {
+  const erroSenha = validarSenha(senha)
+  if (erroSenha) throw new Error(erroSenha)
+  const { error } = await supabase.auth.updateUser({ password: senha })
+  if (error) throw traduzirErro(error)
+}
+
+/* --------------------------- ajuda --------------------------- */
+
+/** Mesmas regras da tela: 8+ letras, maiúscula, número e símbolo. */
+export function validarSenha(senha) {
+  if (!senha || senha.length < 8) return 'A senha precisa de pelo menos 8 letras.'
+  if (!/[A-Z]/.test(senha)) return 'A senha precisa de uma letra maiúscula.'
+  if (!/[0-9]/.test(senha)) return 'A senha precisa de um número.'
+  if (!/[^A-Za-z0-9]/.test(senha)) return 'A senha precisa de um símbolo (!@#$...).'
+  return null
+}
+
+export function forcaDaSenha(senha) {
+  let pontos = 0
+  if ((senha ?? '').length >= 8) pontos++
+  if (/[A-Z]/.test(senha ?? '')) pontos++
+  if (/[0-9]/.test(senha ?? '')) pontos++
+  if (/[^A-Za-z0-9]/.test(senha ?? '')) pontos++
+  return pontos // 0..4
+}
+
+/** Mensagens do Supabase vêm em inglês; aqui viram acolhimento em português. */
+function traduzirErro(error) {
+  const m = (error?.message ?? '').toLowerCase()
+  if (m.includes('invalid login credentials')) return new Error('E-mail ou senha não conferem.')
+  if (m.includes('email not confirmed')) return new Error('Confirme seu e-mail antes de entrar. Olhe sua caixa de entrada.')
+  if (m.includes('user already registered')) return new Error('Este e-mail já tem um ninho. Tente entrar.')
+  if (m.includes('rate limit') || m.includes('too many')) return new Error('Muitas tentativas. Respire um pouco e tente de novo.')
+  if (m.includes('password')) return new Error('Senha fraca demais. Use 8+ letras, uma maiúscula, um número e um símbolo.')
+  return new Error(error?.message ?? 'Algo não saiu como esperado. Tente de novo.')
+}
