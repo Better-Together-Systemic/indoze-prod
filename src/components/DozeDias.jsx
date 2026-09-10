@@ -41,37 +41,57 @@ export default function DozeDias({ aoConversar }) {
 
       {aviso && <div className="aviso-trancado aparece">{aviso}</div>}
 
-      <div className="grade-dias">
-        {DIAS.map((d) => {
-          const f = FASES[d.fase]
-          const est = estadoDoDia(d.n, reflexoes)
-          return (
-            <div
-              key={d.n}
-              className={`dia-card ${est}`}
-              style={{ '--cor-fase': f.cor, '--cor-fase-bg': f.bg }}
-              onClick={() => tocarNoDia(d.n)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && tocarNoDia(d.n)}
-              title={est === 'trancado' ? `Abre quando você concluir o Dia ${d.n - 1}` : undefined}
-            >
-              {est === 'feito' && <div className="selo">✓</div>}
-              {est === 'trancado' && <div className="selo cadeado">🔒</div>}
-              {est === 'aberto' && <div className="selo agora">🥚</div>}
-              <div className="num">Dia {d.n}</div>
-              <div className="emoji">{d.emoji}</div>
-              <h4>{d.titulo}</h4>
-              <span className="fase-tag">{f.nome}</span>
-              {est === 'feito' && <span className="estado-dia">guardado no ninho</span>}
-              {est === 'aberto' && <span className="estado-dia agora">é a sua vez</span>}
-              {est === 'trancado' && <span className="estado-dia">chocando…</span>}
+      {gruposPorFase(DIAS).map((grupo) => {
+        const f = FASES[grupo.fase]
+        return (
+          <div className="grupo-fase" key={grupo.fase} style={{ '--cor-fase': f.cor }}>
+            <div className="grupo-fase-titulo">
+              <span className="bola" />
+              {f.nome}
             </div>
-          )
-        })}
-      </div>
+            <div className="grade-dias">
+              {grupo.dias.map((d) => {
+                const est = estadoDoDia(d.n, reflexoes)
+                return (
+                  <div
+                    key={d.n}
+                    className={`dia-card ${est}`}
+                    style={{ '--cor-fase': f.cor, '--cor-fase-bg': f.bg }}
+                    onClick={() => tocarNoDia(d.n)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && tocarNoDia(d.n)}
+                    title={est === 'trancado' ? `Abre quando você concluir o Dia ${d.n - 1}` : undefined}
+                  >
+                    {est === 'feito' && <div className="selo">✓</div>}
+                    {est === 'trancado' && <div className="selo cadeado">🔒</div>}
+                    {est === 'aberto' && <div className="selo agora">🥚</div>}
+                    <div className="num">Dia {d.n}</div>
+                    <div className="emoji">{d.emoji}</div>
+                    <h4>{d.titulo}</h4>
+                    {est === 'feito' && <span className="estado-dia">guardado no ninho</span>}
+                    {est === 'aberto' && <span className="estado-dia agora">é a sua vez</span>}
+                    {est === 'trancado' && <span className="estado-dia">chocando…</span>}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
+}
+
+/** Os 12 dias já vêm em blocos contíguos por fase — aqui só agrupamos pra exibir. */
+function gruposPorFase(dias) {
+  const grupos = []
+  for (const d of dias) {
+    const ultimo = grupos[grupos.length - 1]
+    if (ultimo && ultimo.fase === d.fase) ultimo.dias.push(d)
+    else grupos.push({ fase: d.fase, dias: [d] })
+  }
+  return grupos
 }
 
 /* ------------------------- a barra do livro ------------------------- */

@@ -44,6 +44,20 @@ export async function entrar({ email, senha }) {
   return data
 }
 
+/**
+ * Login (ou cadastro automático, se for a primeira vez) via Google.
+ * O Supabase leva a pessoa até o Google e traz de volta com a sessão pronta.
+ */
+export async function entrarComGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/entrar`,
+    },
+  })
+  if (error) throw traduzirErro(error)
+}
+
 export async function sair() {
   const { error } = await supabase.auth.signOut()
   if (error) throw error

@@ -2,10 +2,10 @@
 // Estes textos são o coração do método: mexer aqui muda a experiência de quem choca.
 
 export const FASES = {
-  mente:      {nome:"A Mente",        cor:"#d64545", bg:"#fbe5e0"},
-  sistema:    {nome:"O Sistema",      cor:"#2e7d32", bg:"#e6f0e0"},
-  corpo:      {nome:"O Corpo",        cor:"#1565c0", bg:"#e0eaf5"},
-  manifesto:  {nome:"A Manifestação", cor:"#c8952a", bg:"#faf0d8"},
+  mente:      {nome:"A Mente",        cor:"#D8473C", bg:"#FBEAE8"},
+  sistema:    {nome:"O Sistema",      cor:"#2F9E52", bg:"#E9F7ED"},
+  corpo:      {nome:"O Corpo",        cor:"#2E7DBE", bg:"#E9F2FA"},
+  manifesto:  {nome:"A Manifestação", cor:"#B8863A", bg:"#F8EFE0"},
 };
 
 export const DIAS = [

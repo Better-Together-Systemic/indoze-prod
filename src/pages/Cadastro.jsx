@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { cadastrar, forcaDaSenha, validarEmail, validarWhatsapp } from '../lib/auth'
+import { cadastrar, entrarComGoogle, forcaDaSenha, validarEmail, validarWhatsapp } from '../lib/auth'
 import { detectarGenero } from '../lib/linguagem'
 import { LogoIndoze } from '../components/LogoIndoze'
+import IconeGoogle from '../components/IconeGoogle'
 
 const CORES_FORCA = ['#e8dcc0', '#d64545', '#e08a2e', '#c8952a', '#2e7d32']
 
@@ -20,6 +21,7 @@ export default function Cadastro() {
   const [pronto, setPronto] = useState(false)
   const [emailTocado, setEmailTocado] = useState(false)
   const [whatsappTocado, setWhatsappTocado] = useState(false)
+  const [indoGoogle, setIndoGoogle] = useState(false)
 
   // Palpite educado pelo nome — mas quem manda é a pessoa.
   useEffect(() => {
@@ -48,6 +50,16 @@ export default function Cadastro() {
     }
   }
 
+  async function aoClicarGoogle() {
+    setErro(''); setIndoGoogle(true)
+    try {
+      await entrarComGoogle()
+    } catch (err) {
+      setErro(err.message)
+      setIndoGoogle(false)
+    }
+  }
+
   if (pronto) {
     return (
       <div className="tela-auth">
@@ -73,6 +85,13 @@ export default function Cadastro() {
           <LogoIndoze variante="topo" />
         </div>
         <h2>Faça seu ninho</h2>
+
+        <button type="button" className="btn-google" onClick={aoClicarGoogle} disabled={indoGoogle}>
+          <IconeGoogle />
+          {indoGoogle ? 'Levando você ao Google…' : 'Continuar com Google'}
+        </button>
+
+        <div className="divisor-ou"><span>ou crie com e-mail</span></div>
 
         <div className="campo">
           <label htmlFor="cad-nome">Seu nome completo</label>

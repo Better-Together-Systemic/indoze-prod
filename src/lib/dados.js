@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { validarWhatsapp } from './auth'
 
 /**
  * Camada de dados do ninho.
@@ -16,7 +17,7 @@ export async function buscarPerfil() {
 
   const { data, error } = await supabase
     .from('perfis')
-    .select('id, nome, instagram, genero')
+    .select('id, nome, instagram, genero, whatsapp')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -31,6 +32,25 @@ export async function atualizarPerfil({ nome, instagram, genero }) {
   const { data, error } = await supabase
     .from('perfis')
     .update({ nome, instagram: instagram || null, genero })
+    .eq('id', user.id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+/** Usado na telinha que pede o WhatsApp de quem entrou pelo Google. */
+export async function definirWhatsapp(whatsapp) {
+  const erro = validarWhatsapp(whatsapp)
+  if (erro) throw new Error(erro)
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Você precisa entrar no ninho primeiro.')
+
+  const { data, error } = await supabase
+    .from('perfis')
+    .update({ whatsapp: whatsapp.trim() })
     .eq('id', user.id)
     .select()
     .single()

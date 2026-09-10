@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { entrar, pedirNovaSenha } from '../lib/auth'
+import { entrar, entrarComGoogle, pedirNovaSenha } from '../lib/auth'
 import { LogoIndoze } from '../components/LogoIndoze'
+import IconeGoogle from '../components/IconeGoogle'
 
 export default function Login() {
   const navegar = useNavigate()
@@ -10,6 +11,7 @@ export default function Login() {
   const [erro, setErro] = useState('')
   const [aviso, setAviso] = useState('')
   const [enviando, setEnviando] = useState(false)
+  const [indoGoogle, setIndoGoogle] = useState(false)
 
   async function aoEnviar(e) {
     e.preventDefault()
@@ -21,6 +23,16 @@ export default function Login() {
       setErro(err.message)
     } finally {
       setEnviando(false)
+    }
+  }
+
+  async function aoClicarGoogle() {
+    setErro(''); setIndoGoogle(true)
+    try {
+      await entrarComGoogle()
+    } catch (err) {
+      setErro(err.message)
+      setIndoGoogle(false)
     }
   }
 
@@ -44,6 +56,13 @@ export default function Login() {
           <LogoIndoze variante="topo" />
         </div>
         <h2>Entrar no ninho</h2>
+
+        <button type="button" className="btn-google" onClick={aoClicarGoogle} disabled={indoGoogle}>
+          <IconeGoogle />
+          {indoGoogle ? 'Levando você ao Google…' : 'Continuar com Google'}
+        </button>
+
+        <div className="divisor-ou"><span>ou entre com e-mail</span></div>
 
         <div className="campo">
           <label htmlFor="login-email">E-mail</label>
