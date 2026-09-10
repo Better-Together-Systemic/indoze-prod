@@ -220,7 +220,16 @@ input,textarea{font-family:inherit;color:var(--tinta)}
    ===================================================================== */
 #tela-app.ativa{display:block}
 
-.app-ninho{display:flex;min-height:100vh;background:var(--areia)}
+.app-ninho{min-height:100vh;background:var(--areia);flex-direction:column}
+/* especificidade maior que ".tela.ativa" (que fixa display:block), senão a
+   casca não vira flex e o conteúdo desce uma tela inteira abaixo da lateral */
+.tela.ativa.app-ninho{display:flex}
+/* no desktop vira linha (lateral ao lado do conteúdo); no mobile fica coluna
+   (barra superior em cima do conteúdo) — senão a barra superior, sendo o
+   único item ao lado do <main> numa linha, estica e vira uma coluna escura */
+@media(min-width:861px){
+  .app-ninho{flex-direction:row}
+}
 
 /* --- barra lateral (desktop) --- */
 .barra-lateral{
