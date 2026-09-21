@@ -357,6 +357,9 @@ input,textarea{font-family:inherit;color:var(--tinta)}
 }
 .btn-livro:hover:not(:disabled){background:var(--dourado-claro);transform:translateY(-1px)}
 .btn-livro:disabled{opacity:.6;cursor:wait}
+.botoes-livro{display:flex;gap:12px;flex-wrap:wrap}
+.btn-livro-apple{background:#1d1d1f}
+.btn-livro-apple:hover:not(:disabled){background:#000;transform:translateY(-1px)}
 .progresso-livro{width:200px;max-width:100%;height:8px;border-radius:4px;background:var(--areia-2);overflow:hidden}
 .progresso-livro span{display:block;height:100%;background:var(--dourado);border-radius:4px;transition:width .4s}
 

@@ -98,19 +98,24 @@ function gruposPorFase(dias) {
 
 function BarraDoLivro({ feitos }) {
   const { nome, reflexoes } = useNinho()
-  const [gerando, setGerando] = useState(false)
+  const [gerando, setGerando] = useState('')
 
-  async function gerar() {
-    setGerando(true)
+  async function gerar(estilo) {
+    setGerando(estilo)
     try {
-      // o gerador só é baixado quando alguém realmente vai gerar o livro
-      const { gerarLivroPDF } = await import('../lib/livroPdf')
-      await gerarLivroPDF({ nome, reflexoes })
+      if (estilo === 'apple') {
+        // o gerador só é baixado quando alguém realmente vai gerar o livro
+        const { gerarLivroPDFApple } = await import('../lib/livroPdfApple')
+        await gerarLivroPDFApple({ nome, reflexoes })
+      } else {
+        const { gerarLivroPDF } = await import('../lib/livroPdf')
+        await gerarLivroPDF({ nome, reflexoes })
+      }
     } catch (e) {
       console.error(e)
       alert('O ninho tropeçou ao montar seu livro. Tente de novo em um instante.')
     } finally {
-      setGerando(false)
+      setGerando('')
     }
   }
 
@@ -121,9 +126,14 @@ function BarraDoLivro({ feitos }) {
           <strong>🥚 Seu ovo chocou!</strong>
           <span>Você atravessou os doze dias. Agora seu livro pode nascer.</span>
         </div>
-        <button className="btn-livro" onClick={gerar} disabled={gerando}>
-          {gerando ? 'Preparando seu ninho…' : 'Gerar meu livro em PDF ✨'}
-        </button>
+        <div className="botoes-livro">
+          <button className="btn-livro" onClick={() => gerar('jornal')} disabled={!!gerando}>
+            {gerando === 'jornal' ? 'Preparando seu ninho…' : 'Gerar jornal em PDF ✨'}
+          </button>
+          <button className="btn-livro btn-livro-apple" onClick={() => gerar('apple')} disabled={!!gerando}>
+            {gerando === 'apple' ? 'Preparando sua edição…' : 'Gerar edição moderna em PDF'}
+          </button>
+        </div>
       </div>
     )
   }
