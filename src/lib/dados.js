@@ -17,7 +17,7 @@ export async function buscarPerfil() {
 
   const { data, error } = await supabase
     .from('perfis')
-    .select('id, nome, instagram, genero, whatsapp')
+    .select('id, nome, instagram, genero, whatsapp, pago')
     .eq('id', user.id)
     .maybeSingle()
 

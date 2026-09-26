@@ -1,0 +1,9 @@
+# Configuração das Edge Functions.
+#
+# A InfinitePay não manda crachá de login nenhum quando chama nosso webhook —
+# por isso essa função (só ela) roda com a checagem de JWT do próprio Supabase
+# desligada. Continua segura porque, por dentro, o webhook confere o pagamento
+# de volta com a InfinitePay antes de liberar qualquer acesso (veja
+# supabase/functions/infinitepay-webhook/index.ts).
+[functions.infinitepay-webhook]
+verify_jwt = false

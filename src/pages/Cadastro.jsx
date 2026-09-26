@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { cadastrar, entrarComGoogle, forcaDaSenha, validarEmail, validarWhatsapp } from '../lib/auth'
+import { cadastrar, forcaDaSenha, validarEmail, validarWhatsapp } from '../lib/auth'
 import { detectarGenero } from '../lib/linguagem'
 import { LogoIndoze } from '../components/LogoIndoze'
 import IconeGoogle from '../components/IconeGoogle'
@@ -21,7 +21,6 @@ export default function Cadastro() {
   const [pronto, setPronto] = useState(false)
   const [emailTocado, setEmailTocado] = useState(false)
   const [whatsappTocado, setWhatsappTocado] = useState(false)
-  const [indoGoogle, setIndoGoogle] = useState(false)
 
   // Palpite educado pelo nome — mas quem manda é a pessoa.
   useEffect(() => {
@@ -47,16 +46,6 @@ export default function Cadastro() {
       setErro(err.message)
     } finally {
       setEnviando(false)
-    }
-  }
-
-  async function aoClicarGoogle() {
-    setErro(''); setIndoGoogle(true)
-    try {
-      await entrarComGoogle()
-    } catch (err) {
-      setErro(err.message)
-      setIndoGoogle(false)
     }
   }
 
@@ -86,10 +75,11 @@ export default function Cadastro() {
         </div>
         <h2>Faça seu ninho</h2>
 
-        <button type="button" className="btn-google" onClick={aoClicarGoogle} disabled={indoGoogle}>
+        <button type="button" className="btn-google" disabled title="Em breve">
           <IconeGoogle />
-          {indoGoogle ? 'Levando você ao Google…' : 'Continuar com Google'}
+          Continuar com Google
         </button>
+        <p className="aviso-msg" style={{ textAlign: 'center', marginTop: -8 }}>Em breve</p>
 
         <div className="divisor-ou"><span>ou crie com e-mail</span></div>
 

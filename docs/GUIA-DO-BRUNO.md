@@ -131,6 +131,67 @@ do Supabase. Nunca no front.
 
 ---
 
+## PASSO 3.5 — Cobrança de acesso (InfinitePay)
+
+Desde a migração `004_pagamento.sql`, cadastro sozinho **não abre o ninho**.
+A pessoa só entra depois que o pagamento é confirmado. Quem já tinha conta
+antes desta migração não é afetado (fica marcado como pago automaticamente).
+
+**3.5.1 — Rodar a migração.** Supabase → SQL Editor → cole
+`supabase/migrations/004_pagamento.sql` inteiro → Run.
+
+**3.5.2 — Deployar as três Edge Functions novas** (junto com a pasta
+`_shared`, que as três importam):
+
+- `infinitepay-criar-link` — gera o link de pagamento de quem está logado
+- `infinitepay-confirmar` — confirma o pagamento quando a pessoa volta do checkout
+- `infinitepay-webhook` — recebido pela própria InfinitePay quando aprova um pagamento
+
+Se usar a CLI: `supabase functions deploy infinitepay-criar-link`,
+`supabase functions deploy infinitepay-confirmar` e
+`supabase functions deploy infinitepay-webhook --no-verify-jwt`
+(o `config.toml` já marca `verify_jwt = false` só para o webhook — a
+InfinitePay não manda crachá nenhum quando chama ele). Pelo painel,
+cole cada função em Edge Functions → New Function e, na do webhook,
+desligue "Enforce JWT Verification" nas configurações dela.
+
+**3.5.3 — Variáveis de ambiente** (nas três funções, ou num "shared secret"
+do projeto, já que todas usam `_shared/infinitepay.ts`):
+
+```
+INFINITEPAY_PRECO_CENTAVOS=1200   ← preço promocional de lançamento: R$12,00
+INFINITEPAY_DESCRICAO=Acesso à jornada INDOZE   ← opcional, aparece no comprovante
+```
+
+> Preço fica só aqui, numa variável de ambiente — não no código. Quando a
+> promoção de lançamento acabar, é só trocar esse valor nas três funções
+> (não precisa redeployar nada).
+
+O handle (`bettertogethersystemic`) já está fixo no código — não é segredo,
+é o mesmo que aparece na URL do link que você já usa hoje
+(`checkout.infinitepay.io/bettertogethersystemic/...`).
+
+**3.5.4 — Testar de verdade antes de anunciar.** A documentação pública da
+InfinitePay não garante o nome exato do campo que traz a URL do checkout na
+resposta de `/links`. Faça um pagamento de teste (pode ser o menor valor
+possível) pelo fluxo real do site. Se aparecer o erro "a InfinitePay não
+devolveu o link de pagamento", olhe os logs da função `infinitepay-criar-link`
+(Supabase → Edge Functions → Logs, ou `supabase functions logs
+infinitepay-criar-link`) — o corpo bruto da resposta fica registrado ali — e
+ajuste a lista de campos em `criarLinkCheckout()` dentro de
+`supabase/functions/_shared/infinitepay.ts`.
+
+**Como funciona por baixo do pano:** ninguém no navegador consegue se marcar
+como pago sozinho — o `GRANT` da migração tira essa permissão de quem está
+logado. Só a `service_role` (usada pelas três Edge Functions) escreve nas
+colunas de pagamento, e mesmo assim só depois de confirmar com a própria
+InfinitePay (`payment_check`) que a transação foi realmente aprovada e o
+valor pago cobre o preço combinado. Isso vale tanto para o webhook (o
+caminho garantido) quanto para a confirmação pelo navegador (o caminho
+rápido, quando a pessoa volta do checkout).
+
+---
+
 ## PASSO 4 — Subir no Vercel
 
 1. Suba este projeto num repositório Git (o `.gitignore` já protege o `.env`)
@@ -161,6 +222,8 @@ Depois do deploy, teste **nesta ordem**:
 - [ ] A entrada abre e mostra o INDOZE com o ovo
 - [ ] Criar conta → chega o e-mail de confirmação
 - [ ] Confirmar o e-mail → consegue entrar
+- [ ] Ao entrar sem ter pago, cai na tela de pagamento (não no ninho)
+- [ ] Pagar de verdade (valor mínimo) → volta e cai direto no ninho
 - [ ] O nome aparece no topo e a Sala fala no gênero certo
 - [ ] Só o Dia 1 está aberto; os outros com cadeado
 - [ ] Escrever e guardar o Dia 1 → vira memória, o Dia 2 abre
@@ -197,3 +260,5 @@ uma reflexão em cada. Confirme que a conta A **não vê nada** da conta B.
 | "não reconheceu seu crachá" | A Edge Function não está validando o token direito |
 | Login funciona mas o ninho vem vazio | RLS: confira se as 9 políticas existem |
 | Cadastro cria login mas não cria perfil | O gatilho `trg_novo_usuario` não foi criado |
+| "a InfinitePay não devolveu o link de pagamento" | O nome do campo na resposta de `/links` mudou — veja PASSO 3.5.4 |
+| Pagou mas não entrou (webhook falhou/atrasou) | Clique "Já paguei, verificar" na tela de pagamento — refaz a confirmação |

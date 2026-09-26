@@ -38,13 +38,15 @@ src/
     dados.js            Ler e guardar reflexões e conversas
     linguagem.js        Fala no gênero certo + regra do "um ovo de cada vez"
     indez.js            Conversa com a IA (via proxy — a chave nunca vem pro navegador)
+    pagamento.js        Fala com as Edge Functions da cobrança (InfinitePay)
     livroPdf.js         O livro que nasce dos 12 dias
     NinhoContext.jsx    Quem está dentro e o que já chocou
   components/           Sala, DozeDias, ChatIndez, MeuNinho, Historias, LogoIndoze
-  pages/                Entrada, Cadastro, Login, NovaSenha, Ninho
+  pages/                Entrada, Cadastro, Login, NovaSenha, Ninho, Pagamento, PagamentoRetorno
   styles/global.css     A cara da marca
 
 supabase/migrations/    O SQL que cria o banco (rodar no SQL Editor)
+supabase/functions/     Edge Functions: proxy da IA + cobrança da InfinitePay
 public/                 Logos e as 12 ilustrações
 ```
 

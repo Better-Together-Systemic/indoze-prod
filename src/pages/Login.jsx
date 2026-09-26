@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { entrar, entrarComGoogle, pedirNovaSenha } from '../lib/auth'
+import { entrar, pedirNovaSenha } from '../lib/auth'
 import { LogoIndoze } from '../components/LogoIndoze'
 import IconeGoogle from '../components/IconeGoogle'
 
@@ -11,7 +11,6 @@ export default function Login() {
   const [erro, setErro] = useState('')
   const [aviso, setAviso] = useState('')
   const [enviando, setEnviando] = useState(false)
-  const [indoGoogle, setIndoGoogle] = useState(false)
 
   async function aoEnviar(e) {
     e.preventDefault()
@@ -23,16 +22,6 @@ export default function Login() {
       setErro(err.message)
     } finally {
       setEnviando(false)
-    }
-  }
-
-  async function aoClicarGoogle() {
-    setErro(''); setIndoGoogle(true)
-    try {
-      await entrarComGoogle()
-    } catch (err) {
-      setErro(err.message)
-      setIndoGoogle(false)
     }
   }
 
@@ -57,10 +46,11 @@ export default function Login() {
         </div>
         <h2>Entrar no ninho</h2>
 
-        <button type="button" className="btn-google" onClick={aoClicarGoogle} disabled={indoGoogle}>
+        <button type="button" className="btn-google" disabled title="Em breve">
           <IconeGoogle />
-          {indoGoogle ? 'Levando você ao Google…' : 'Continuar com Google'}
+          Continuar com Google
         </button>
+        <p className="aviso-msg" style={{ textAlign: 'center', marginTop: -8 }}>Em breve</p>
 
         <div className="divisor-ou"><span>ou entre com e-mail</span></div>
 
