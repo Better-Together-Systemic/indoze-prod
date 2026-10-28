@@ -141,8 +141,8 @@ function BarraDoLivro({ feitos }) {
   return (
     <div className="barra-livro">
       <div>
-        <strong>Seu livro está sendo chocado…</strong>
-        <span>{feitos} de 12 dias com reflexão. Quando completar os doze, seu livro nasce aqui.</span>
+        <strong>O que você quer está sendo chocado…</strong>
+        <span>{feitos} de 12 dias com reflexão. Quando completar os doze, sua história nasce aqui.</span>
       </div>
       <div className="progresso-livro">
         <span style={{ width: `${(feitos / 12) * 100}%` }} />
